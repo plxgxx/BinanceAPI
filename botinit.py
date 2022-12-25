@@ -1,54 +1,53 @@
 import os
-import telegram.ext
-from telegram.ext import Updater
-from telegram.ext import CallbackContext
+from telegram.ext import Updater, Filters
+from telegram.ext import CommandHandler, MessageHandler
+from statefuncs import *
 
 """ inicialise handlers and start the bot """
 
-bot_token = os.getenv("BOT_TOKEN")  # variable, because it is neaded on webhook
-updater = Updater(token=bot_token, use_context=True)
-
-# Get the dispatcher to register handlers
-dispatcher = updater.dispatcher
+MAIN_MENU, CURR_GIVING, CRYPT_RECIEVING = range(3)
 
 
-def start(update, context):
-    text = "Hello World!"
-    chat_id = update.message.chat.id
-    context.bot.send_message(
-        chat_id=chat_id,
-        text=text
+
+def main():
+    bot_token = os.getenv("BOT_TOKEN")  # variable, because it is neaded on webhook
+    updater = Updater(token=bot_token, use_context=True)
+
+    # Get the dispatcher to register handlers
+    dispatcher = updater.dispatcher
+
+    necessary_handlers = [CommandHandler('start', start),
+                          CommandHandler('help', help),
+                          CommandHandler('faq', faq)]
+    conv_handler = ConversationHandler(
+        name="conversation",
+        entry_points=[CommandHandler("start", start)],
+        states={
+
+            MAIN_MENU: [
+                *necessary_handlers,
+                MessageHandler(Filters.regex("^Make an offer$"), offer_curr_choice),
+               # MessageHandler(Filters.regex("^Offer history$"), offer_history),
+                MessageHandler(Filters.regex("^What this bot can do?"), faq),
+                MessageHandler(Filters.regex("^Help$"), help)
+            ],
+            CURR_GIVING: [
+                *necessary_handlers,
+                MessageHandler(Filters.regex("^CHF|SEK|PLN|CZK|USD|EUR|UAH|CAD|GBP"), offer_crypt_choice),
+            ]
+
+        },
+        fallbacks=[MessageHandler(Filters.regex("^Done$"), done)],
     )
 
-
-def help(update, context):
-    text = """
-        /start -> Welcome to the channel
-        /help -> Get answers on your questions
-        /faq -> What this bot can do?
-        """
-    chat_id = update.message.chat.id
-    context.bot.send_message(
-        chat_id=chat_id,
-        text=text
-    )
+    dispatcher.add_handler(conv_handler)
+    updater.start_polling()
+    updater.idle()
 
 
 
 
-def faq(update, context):
-    text = """This bot is capable of making 
-    your P2P transactions filter easier"""
-    chat_id = update.message.chat.id
-    context.bot.send_message(
-        chat_id=chat_id,
-        text=text
-    )
 
 
-dispatcher.add_handler(telegram.ext.CommandHandler('start', start))
-dispatcher.add_handler(telegram.ext.CommandHandler('help', help))
-dispatcher.add_handler(telegram.ext.CommandHandler('faq', faq))
-
-updater.start_polling()
-updater.idle()
+if __name__ == '__main__':
+    main()

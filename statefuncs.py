@@ -1,5 +1,6 @@
 from telegram import ReplyKeyboardMarkup
-from botinit import MAIN_MENU, CURR_GIVING
+from botinit import MAIN_MENU, CURR_GIVING, PAYMENT_TYPE, \
+ AMOUNT_SELLING, AMOUNT_BUYING, SPREAD_AMOUNT, ORDER_AMOUNT, DEALS_AMOUNT, CONFIG_NAME
 from telegram.ext import ConversationHandler
 
 
@@ -29,24 +30,74 @@ def help(update, context):
 
 
 def offer_curr_choice(update, context):
-    text = "Choose the currency of your offer"
+    text = "Choose the currency of your offer, " \
+           "tap <Done> if your choice is complete"
     reply_keyboard = [
         ["CHF", "SEK", "PLN"],
         ["CZK", "USD", "EUR"],
         ["UAH", "CAD", "GBP"],
-        ["Done"]
+        ["Done", "Return to main menu"]
     ]
     markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
     update.message.reply_text(text=text, reply_markup=markup)
     return CURR_GIVING
 
 
-def offer_crypt_choice(update, context):
-    update.message.reply_text("See your offers histroy")
-    return MAIN_MENU
+def offer_payment_choice(update, context):
+    text = "Choose the payment method"
+    reply_keyboard = [
+        ["Revolut", "Wise", "SkrillMoneyBookers"],
+        ["Adcash", "ZEN"],
+        ["Done", "Return to main menu"]
+    ]
+    markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
+    update.message.reply_text(text=text, reply_markup=markup)
+    return PAYMENT_TYPE
 
 
-def done():
+def offer_amount_selling(update, context):
+    text = "Insert the amount of currency you sell"
+    #reply_keyboard = update.text
+    update.message.reply_text(text=text)
+    return AMOUNT_SELLING
+
+
+def offer_ammount_buying(update, context):
+    text = "Insert the amount of currency you want to buy"
+    #reply_keyboard = update.text
+    update.message.reply_text(text=text)
+    return AMOUNT_BUYING
+
+
+def offer_spread_amount(update, context):
+    text = "Insert the minimal spread rate"
+    #reply_keyboard = update.text
+    update.message.reply_text(text=text)
+    return SPREAD_AMOUNT
+
+
+def offer_order_amount(update, context):
+    text = "Insert the amount of successful orders"
+    #reply_keyboard = update.text
+    update.message.reply_text(text=text)
+    return ORDER_AMOUNT
+
+
+def offer_deals_amount(update, context):
+    text = "Insert the amount of deals performed"
+    #reply_keyboard = update.text
+    update.message.reply_text(text=text)
+    return DEALS_AMOUNT
+
+
+def order_config_naming(update, context):
+    text = "Give the name to this deal configuration"
+    #reply_keyboard = update.text
+    update.message.reply_text(text=text)
+    return CONFIG_NAME
+
+
+def done(update, context):
     return ConversationHandler.END
 
 

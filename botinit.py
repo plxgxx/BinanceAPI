@@ -5,7 +5,8 @@ from statefuncs import *
 
 """ inicialise handlers and start the bot """
 
-MAIN_MENU, CURR_GIVING, CRYPT_RECIEVING = range(3)
+MAIN_MENU, CURR_GIVING, PAYMENT_TYPE, AMOUNT_SELLING, \
+ AMOUNT_BUYING, SPREAD_AMOUNT, ORDER_AMOUNT, DEALS_AMOUNT, CONFIG_NAME = range(9)
 
 
 
@@ -33,7 +34,39 @@ def main():
             ],
             CURR_GIVING: [
                 *necessary_handlers,
-                MessageHandler(Filters.regex("^CHF|SEK|PLN|CZK|USD|EUR|UAH|CAD|GBP"), offer_crypt_choice),
+                MessageHandler(Filters.regex("^CHF|SEK|PLN|CZK|USD|EUR|UAH|CAD|GBP"), offer_curr_choice),
+                MessageHandler(Filters.regex("^Done$"), offer_payment_choice),#Должен быть переход с Done а не с валюты
+                MessageHandler(Filters.regex("^Return to main menu$"), start)
+            ],
+            PAYMENT_TYPE: [
+                *necessary_handlers,
+                MessageHandler(Filters.regex("^Revolut|Wise|SkrillMoneyBookers|Adcash|ZEN"), offer_payment_choice),
+                MessageHandler(Filters.regex("^Done$"), offer_amount_selling),  # Должен быть переход с Done а не с валюты
+                MessageHandler(Filters.regex("^Return to main menu$"), start)
+            ],
+            AMOUNT_SELLING: [
+                *necessary_handlers,
+                MessageHandler(Filters.regex("^[0-9]"), offer_ammount_buying),
+            ],
+            AMOUNT_BUYING: [
+                *necessary_handlers,
+                MessageHandler(Filters.regex("^[0-9]"), offer_spread_amount),
+            ],
+            SPREAD_AMOUNT: [
+                *necessary_handlers,
+                MessageHandler(Filters.regex("^[0-9]"), offer_order_amount),
+            ],
+            ORDER_AMOUNT: [
+                *necessary_handlers,
+                MessageHandler(Filters.regex("^[0-9]"), offer_deals_amount),
+            ],
+            DEALS_AMOUNT: [
+                *necessary_handlers,
+                MessageHandler(Filters.regex("^[0-9]"), order_config_naming),
+            ],
+            CONFIG_NAME: [
+                *necessary_handlers,
+                MessageHandler(Filters.text, start),
             ]
 
         },
@@ -43,10 +76,6 @@ def main():
     dispatcher.add_handler(conv_handler)
     updater.start_polling()
     updater.idle()
-
-
-
-
 
 
 if __name__ == '__main__':

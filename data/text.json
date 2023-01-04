@@ -1,6 +1,13 @@
 {
   "start": "Приветствуем в BinanceTool",
   "faq": "Этот бот создан чтобы упростить и  \n автоматизировать вашу P2P торговлю",
+  "return": "Вернуться в главное меню",
+  "done": "Готово",
+  "yes": "Да",
+  "no": "Нет",
+  "binance": "Binance P2P",
+
+
 
    "_comment": "Текст для 1 раздела",
   "offer_curr_choice": "Выберите валюту операции, после нажмите :Готово:",
@@ -19,5 +26,29 @@
   "checking": "Проверяет рынок выводит по тз",
   "modify": "Здесь сделаем изменение конфига",
   "delete": "Вы уверены что хотите удалить этот конфиг?",
-  "deleted": "Конфиг удален успешно"
+  "deleted": "Конфиг удален успешно",
+  "manage": "Hастроить конфигурацию",
+  "enable_notif": "Включить уведомления",
+  "market_check": "Проверить сейчас",
+  "double_check": "Проверить ещё раз",
+  "modifying": "Редактировать",
+  "deleting": "Удалить",
+
+  "_comment2": "Regex",
+  "binance_reg": "^Binance P2P$",
+  "manage_reg": "^Hастроить конфигурацию$",
+  "numbers": "^[0-9]",
+  "return_reg": "^Вернуться в главное меню$",
+  "done_reg": "^Готово",
+  "currency": "^CHF|SEK|PLN|CZK|USD|EUR|UAH|CAD|GBP",
+  "payment": "^Revolut|Wise|SkrillMoneyBookers|Adcash|ZEN",
+  "yes_reg": "^Да",
+  "no_reg": "^Нет",
+  "enable_notif_reg": "^Включить уведомления",
+  "market_check_reg": "^Проверить сейчас",
+  "double_check_reg": "^Проверить ещё раз",
+  "modifying_reg": "^Редактировать",
+  "deleting_reg": "^Удалить"
+
+
 }

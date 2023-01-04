@@ -5,9 +5,9 @@ from data import text
 
 def starting_setting(update, context):
     reply_keyboard = [
-        ["Включить уведомления", "Проверить сейчас"],
-        ["Редактировать", "Удалить"],
-        ["Вернуться в главное меню"]
+        [text["enable_notif"], text["market_check"]],
+        [text["modifying"], text["deleting"]],
+        [text["return"]]
     ]
     markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
     update.message.reply_text(text=text["starting"], reply_markup=markup)
@@ -16,7 +16,7 @@ def starting_setting(update, context):
 
 def notification_text(update, context):
     reply_keyboard = [
-        ["Настроить конфигурацию", "Вернуться в главное меню"]
+        [text["manage"], text["return"]]
     ]
     markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
     update.message.reply_text(text=text["notification"], reply_markup=markup)
@@ -25,8 +25,8 @@ def notification_text(update, context):
 
 def checking_market(update, context):
     reply_keyboard = [
-        ["Включить уведомления", "Проверить ещё раз"],
-        ["В настройки конфигурации", "Вернуться в главное меню"]
+        [text["enable_notif"], text["double_check"]],
+        [text["manage"], text["return"]]
     ]
     markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
     update.message.reply_text(text=text["checking"], reply_markup=markup)
@@ -35,7 +35,7 @@ def checking_market(update, context):
 
 def setting_modify(update, context):
     reply_keyboard = [
-        ["В настройки конфигурации", "Вернуться в главное меню"]
+        [text["manage"], text["return"]]
     ]
     markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
     update.message.reply_text(text=text["modify"], reply_markup=markup)
@@ -44,7 +44,7 @@ def setting_modify(update, context):
 
 def delete_config(update, context):
     reply_keyboard = [
-        ["Да", "Нет"]
+        [text["yes"], text["no"]]
     ]
     markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
     update.message.reply_text(text=text["delete"], reply_markup=markup)

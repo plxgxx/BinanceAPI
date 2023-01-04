@@ -8,7 +8,7 @@ def offer_curr_choice(update, context):
         ["CHF", "SEK", "PLN"],
         ["CZK", "USD", "EUR"],
         ["UAH", "CAD", "GBP"],
-        ["Готово", "Вернуться в главное меню"]
+        [text["done"], text["return"]]
     ]
     markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
     update.message.reply_text(text=text["offer_curr_choice"], reply_markup=markup)
@@ -19,7 +19,7 @@ def offer_payment_choice(update, context):
     reply_keyboard = [
         ["Revolut", "Wise", "SkrillMoneyBookers"],
         ["Adcash", "ZEN"],
-        ["Готово", "Вернуться в главное меню"]
+        [text["done"], text["return"]]
     ]
     markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
     update.message.reply_text(text=text["offer_payment_choice"], reply_markup=markup)
@@ -63,7 +63,7 @@ def order_config_naming(update, context):
 
 def completion_message(update, context):
     reply_keyboard = [
-        ["Настроить конфигурацию", "Вернуться в главное меню"]
+        [text["manage"], text["return"]]
     ]
     markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
     update.message.reply_text(text=text["completion_message"], reply_markup=markup)

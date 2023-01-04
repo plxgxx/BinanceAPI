@@ -6,9 +6,9 @@ from data import text
 
 def start(update, context):
     reply_keyboard = [
-        ["Binance P2P", "Binance P2P с конвертацией(Позже)"],
-        ["Мои уведомления(Позже)", "Hастроить конфиг"],
-        ["Готово"],
+        [text["binance"], "Binance P2P с конвертацией(Позже)"],
+        ["Мои уведомления(Позже)", text["manage"]],
+        [text["done"]]
     ]
     markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
     update.message.reply_text(text=text["start"], reply_markup=markup)

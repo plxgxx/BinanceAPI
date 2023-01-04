@@ -1,4 +1,6 @@
 import os
+import sys
+import logging
 from telegram.ext import Updater, Filters
 from telegram.ext import CommandHandler, MessageHandler
 from statefuncs import *
@@ -6,29 +8,58 @@ from handlers.config_handlers import *
 from handlers.stats_handlers import *
 from states import *
 from data import text
+from dotenv import load_dotenv
+
+load_dotenv()
+
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+print("-------- succesful import --------")
 
 
 """ inicialise handlers and start the bot """
 
 
+def error_handler(update, context):
+    """Log Errors caused by Updates."""
+    logger.warning('Update "%s" caused error "%s"', update, context.error)
+
+
 def main():
+    # storage_file = "storage"
+    # my_persistence = PicklePersistence(filename=storage_file)
+
     bot_token = os.getenv("BOT_TOKEN")  # variable, because it is neaded on webhook
     updater = Updater(token=bot_token, use_context=True)
 
     # Get the dispatcher to register handlers
     dispatcher = updater.dispatcher
 
-    necessary_handlers = [CommandHandler('start', start),
-                         ]
-    conv_handler = ConversationHandler(
-        name="conversation",
-        entry_points=[CommandHandler("start", start)],
-        states={
+    if ("--service" in sys.argv) or ("-s" in sys.argv):
+        print("!!!!!!!! bot on service !!!!!!!!")
+        dispatcher.add_handler(MessageHandler((Filters.text | Filters.command), echo_service))
+    else:
+        necessary_handlers = [CommandHandler('start', start),
+                              CommandHandler('stop', done),
+                            ]
+        conv_handler = ConversationHandler(
+            name="conversation",
+            entry_points=[CommandHandler("start", start)],
+            states={
 
             States.MAIN_MENU: [
                 *necessary_handlers,
                 MessageHandler(Filters.regex(text["binance_reg"]), offer_curr_choice),
                 MessageHandler(Filters.regex(text["manage_reg"]), starting_setting),
+            ],
+            States.PASSWORD_CHECK: [
+                *necessary_handlers,
+                MessageHandler(Filters.text, password_check),
+            ],
+            States.NAME_AND_SURNAME: [
+                *necessary_handlers,
+                MessageHandler(Filters.text, get_name_surname)
             ],
             States.CURR_GIVING: [
                 *necessary_handlers,
@@ -106,8 +137,31 @@ def main():
         fallbacks=[MessageHandler(Filters.regex(text["done_reg"]), done)],
     )
 
-    dispatcher.add_handler(conv_handler)
-    updater.start_polling()
+        dispatcher.add_handler(conv_handler)
+    
+
+    dispatcher.add_error_handler(error_handler)
+
+
+    if ("--web-hook" in sys.argv) or ("-w" in sys.argv):
+        print("-------- starting webhook --------")
+        host_port = int(os.getenv("WEBHOOK_PORT"))
+        host_url = os.getenv("WEBHOOK_URL")
+        webhook_host_url = f"https://{host_url}:{host_port}/{bot_token}"
+        print("started on\n\n" + webhook_host_url)
+        updater.start_webhook(
+            listen="0.0.0.0",
+            port=host_port,
+            url_path=bot_token,
+            key="private.key",
+            cert="cert.pem",
+            webhook_url=webhook_host_url,
+        )
+    else:
+        print("-------- starting polling --------")
+        updater.start_polling()
+
+    
     updater.idle()
 
 

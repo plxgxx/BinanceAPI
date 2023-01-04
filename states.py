@@ -35,5 +35,9 @@ class States(Enum):
 
     SETTING_DELETE = 15
 
+    NAME_AND_SURNAME = 16
+
+    PASSWORD_CHECK = 17
+
 
 

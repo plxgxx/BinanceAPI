@@ -1,5 +1,6 @@
 from telegram import ReplyKeyboardMarkup
 from states import *
+from statefuncs import start
 from data import text
 
 
@@ -53,4 +54,4 @@ def delete_config(update, context):
 
 def succesfull_delete(update, context):
     update.message.reply_text(text=text["deleted"])
-    return States.MAIN_MENU
+    return start(update, context)

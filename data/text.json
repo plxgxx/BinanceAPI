@@ -7,6 +7,11 @@
   "no": "Нет",
   "binance": "Binance P2P",
 
+  "non-authorized": "ві не авторизовані пошли нахуй або скажіть паляниця",
+  "authorized_successfully": "харош ти %s",
+  "enter_name": "як вас звати пане",
+  "wrong_password": "пішов нахуй кацап",
+
 
 
    "_comment": "Текст для 1 раздела",

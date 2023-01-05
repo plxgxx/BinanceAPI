@@ -69,7 +69,6 @@ def main():
             States.PAYMENT_TYPE: [
                 *necessary_handlers,
                 CallbackQueryHandler(offer_payment_choice, pass_chat_data=True, pass_user_data=True),
-                # MessageHandler(Filters.regex(text["done_reg"]), offer_amount_selling),  # Должен быть переход с Done а не с валюты
                 MessageHandler(Filters.regex(text["return_reg"]), start)
             ],
             States.AMOUNT_SELLING: [
@@ -99,12 +98,12 @@ def main():
             States.COMPLETE_CREATION: [
                 *necessary_handlers,
                 MessageHandler(Filters.regex(text["manage_reg"]), config_choice),
-                MessageHandler(Filters.regex(text["return_reg"]), start)
+                MessageHandler(Filters.regex(text["return_reg"]), start),
             ],
             States.SETTING_CHOICE:[
                *necessary_handlers,
+                MessageHandler(Filters.regex(text["return_reg"]), start),
                 MessageHandler(Filters.text, starting_setting),
-                MessageHandler(Filters.regex(text["return_reg"]), start)
             ],
             States.SETTING_WELCOME: [
                 *necessary_handlers,

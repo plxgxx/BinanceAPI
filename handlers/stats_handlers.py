@@ -15,8 +15,9 @@ def config_choice(update, context):
     ]
     reply_keyboard.append([text["return"]])
     markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
-    update.message.reply_text(text=text["offer_curr_choice"], reply_markup=markup)
+    update.message.reply_text(text=text["choose_config"], reply_markup=markup)
     return States.SETTING_CHOICE
+
 
 def starting_setting(update, context):
     msg = update.message.text

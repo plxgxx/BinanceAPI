@@ -72,6 +72,7 @@ class NotificationCumfig(Base):
     buy_volume = Column(Integer)
     spread_percent = Column(Float)
     completed_orders_percent = Column(Float)
+    deals_performed = Column(Integer)
     is_alert = Column(Boolean)
     added_at = Column(Date)
 

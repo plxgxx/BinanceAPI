@@ -1,6 +1,9 @@
+import datetime
+
 from telegram import ReplyKeyboardMarkup, InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardRemove
 from states import *
-from data import text
+from data import text, TIME_ZONE
+from database import db_session
 
 
 def offer_curr_choice(update, context):
@@ -38,7 +41,7 @@ def offer_payment_choice(update, context):
         context.user_data["chosen_methods"] = []
     elif update.callback_query.data == "done":
         print(context.user_data["chosen_methods"])
-        offer_amount_selling(update, context)
+        return offer_amount_selling(update, context)
     else:
         context.user_data["chosen_methods"].append(str(update.callback_query.data))
         print(context.user_data["chosen_methods"])
@@ -60,7 +63,7 @@ def offer_payment_choice(update, context):
     return States.PAYMENT_TYPE
 
 
-def offer_amount_selling(update, context):
+def offer_amount_selling(update, context):#ТУТ ЧИНИТЬ
     #reply_keyboard = update.text
     # update.message.reply_text(text=text["offer_amount_selling"])
     context.bot.send_message(chat_id=update.callback_query.message.chat.id, text=text["offer_amount_selling"], reply_markup=ReplyKeyboardRemove())
@@ -68,39 +71,53 @@ def offer_amount_selling(update, context):
 
 
 def offer_ammount_buying(update, context):
-    #reply_keyboard = update.text
+    msg = update.message.text
     update.message.reply_text(text=text["offer_ammount_buying"])
+    context.user_data["amount_selling"] = int(msg)
     return States.AMOUNT_BUYING
 
 
 def offer_spread_amount(update, context):
-    #reply_keyboard = update.text
+    msg = update.message.text
+    context.user_data["amount_buying"] = int(msg)
+
     update.message.reply_text(text=text["offer_spread_amount"])
     return States.SPREAD_AMOUNT
 
 
 def offer_order_amount(update, context):
-    #reply_keyboard = update.text
+    msg = update.message.text
+    context.user_data["spread_amount"] = float(msg)
     update.message.reply_text(text=text["offer_order_amount"])
     return States.ORDER_AMOUNT
 
 
 def offer_deals_amount(update, context):
-    #reply_keyboard = update.text
+    msg = update.message.text
+    context.user_data["order_amount"] = float(msg)
     update.message.reply_text(text=text["offer_deals_amount"])
     return States.DEALS_AMOUNT
 
 
 def order_config_naming(update, context):
-    #reply_keyboard = update.text
+    msg = update.message.text
+    context.user_data["deals_amount"] = int(msg)
     update.message.reply_text(text=text["order_config_naming"])
     return States.CONFIG_NAME
 
 def completion_message(update, context):
-    # db_session.add_config(context.user_data)
+    time_added = datetime.datetime.now(tz=TIME_ZONE)
+    context.user_data["added_at"] = time_added
+    chat_id = update.message.chat.id
+    context.user_data["chat_id"] = chat_id
+    msg = update.message.text
+    context.user_data["config_name"] = msg
+
     reply_keyboard = [
         [text["manage"], text["return"]]
     ]
     markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
     update.message.reply_text(text=text["completion_message"], reply_markup=markup)
+    print(context.user_data)
+    db_session.add_config(context.user_data)
     return States.COMPLETE_CREATION

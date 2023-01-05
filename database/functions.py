@@ -236,9 +236,46 @@ class DBSession():
         users = session.query(User.chat_id).all()
         return users
 
+    @local_session
+    def add_config(self, session, user_data):
+        chat_id = user_data["chat_id"]
+        name = user_data["config_name"]
+        currency = user_data["chosen_currency"]
+        payment_choices = str(user_data["chosen_methods"])
+        sale_volume = user_data["amount_selling"]
+        buy_volume = user_data["amount_buying"]
+        spread_percent = user_data["spread_amount"]
+        completed_orders_percent = user_data["order_amount"]
+        deals_performed = user_data["deals_amount"]
+        time_added = user_data["added_at"]
 
+
+
+
+        new_config = NotificationCumfig(
+            user_id=chat_id,
+            is_alert=False,
+            name=name,
+            currency=currency,
+            payment_choices=payment_choices,
+            sale_volume=sale_volume,
+            buy_volume=buy_volume,
+            spread_percent=spread_percent,
+            completed_orders_percent=completed_orders_percent,
+            deals_performed=deals_performed,
+            added_at=time_added,
+        )
+        session.add(new_config)
+        session.commit()
+        return new_config
          
-
-
+    @local_session
+    def get_configs_list(self, session, user_id):
+        user_configs = session.query(NotificationCumfig.name).filter_by(user_id=user_id).all()
+        return user_configs
+    @local_session
+    def get_config_info(self, session, name):
+        config_info = session.query(NotificationCumfig).filter_by(name=name).first()
+        return config_info
 
 db_session: DBSession = DBSession()

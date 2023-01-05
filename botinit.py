@@ -51,7 +51,7 @@ def main():
             States.MAIN_MENU: [
                 *necessary_handlers,
                 MessageHandler(Filters.regex(text["binance_reg"]), offer_curr_choice),
-                MessageHandler(Filters.regex(text["manage_reg"]), starting_setting),
+                MessageHandler(Filters.regex(text["manage_reg"]), config_choice),
             ],
             States.PASSWORD_CHECK: [
                 *necessary_handlers,
@@ -98,7 +98,12 @@ def main():
             ],
             States.COMPLETE_CREATION: [
                 *necessary_handlers,
-                MessageHandler(Filters.regex(text["manage_reg"]), starting_setting),
+                MessageHandler(Filters.regex(text["manage_reg"]), config_choice),
+                MessageHandler(Filters.regex(text["return_reg"]), start)
+            ],
+            States.SETTING_CHOICE:[
+               *necessary_handlers,
+                MessageHandler(Filters.text, starting_setting),
                 MessageHandler(Filters.regex(text["return_reg"]), start)
             ],
             States.SETTING_WELCOME: [

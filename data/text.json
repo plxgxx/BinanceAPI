@@ -5,14 +5,14 @@
   "done": "Готово",
   "yes": "Да",
   "no": "Нет",
-  "binance": "Binance P2P",
+  "binance": "Создать конфигурацию для Binance P2P",
+  "manage": "Hастроить конфигурацию",
 
-  "non-authorized": "ві не авторизовані пошли нахуй або скажіть паляниця",
-  "authorized_successfully": "харош ти %s",
-  "enter_name": "як вас звати пане",
+  "non-authorized": "Вибачте, але Ви не авторизовані. Скажіть паляниця",
+  "authorized_successfully": "Вітаємо, %s",
+  "enter_name": "Як вас звати пане",
   "wrong_password": "пішов нахуй кацап",
-  "wrong_name_format": "введіть Ваше повне Імʼя з фамілією будь ласка пане",
-
+  "wrong_name_format": "Введіть Ваше повне Імʼя з фамілією, будь ласка, пане",
 
 
    "_comment": "Текст для 1 раздела",
@@ -26,6 +26,7 @@
   "order_config_naming": "Назовите данную конфигурацию",
   "completion_message": "Конфигурация создана успешно",
 
+
    "_comment1": "Текст для 2 раздела",
   "choose_config": "Выберите конфиг для просмотра или редактирования",
   "starting": "Тут будет инфо про конфиг",
@@ -34,28 +35,17 @@
   "modify": "Здесь сделаем изменение конфига",
   "delete": "Вы уверены что хотите удалить этот конфиг?",
   "deleted": "Конфиг удален успешно",
-  "manage": "Hастроить конфигурацию",
   "enable_notif": "Включить уведомления",
   "market_check": "Проверить сейчас",
   "double_check": "Проверить ещё раз",
   "modifying": "Редактировать",
   "deleting": "Удалить",
 
+
   "_comment2": "Regex",
-  "binance_reg": "^Binance P2P$",
-  "manage_reg": "^Hастроить конфигурацию$",
   "numbers": "^[0-9]",
-  "return_reg": "^Вернуться в главное меню$",
-  "done_reg": "^Готово",
   "currency": "^CHF|SEK|PLN|CZK|USD|EUR|UAH|CAD|GBP",
   "payment": "^Revolut|Wise|SkrillMoneyBookers|Adcash|ZEN",
   "yes_reg": "^Да",
-  "no_reg": "^Нет",
-  "enable_notif_reg": "^Включить уведомления",
-  "market_check_reg": "^Проверить сейчас",
-  "double_check_reg": "^Проверить ещё раз",
-  "modifying_reg": "^Редактировать",
-  "deleting_reg": "^Удалить"
-
-
+  "no_reg": "^Нет"
 }

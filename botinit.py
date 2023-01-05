@@ -1,7 +1,7 @@
 import os
 import sys
 import logging
-from telegram.ext import Updater, Filters
+from telegram.ext import Updater, Filters, PicklePersistence
 from telegram.ext import CommandHandler, MessageHandler, CallbackQueryHandler
 from statefuncs import *
 from handlers.config_handlers import *
@@ -27,11 +27,11 @@ def error_handler(update, context):
 
 
 def main():
-    # storage_file = "storage"
-    # my_persistence = PicklePersistence(filename=storage_file)
+    storage_file = "storage"
+    my_persistence = PicklePersistence(filename=storage_file)
 
     bot_token = os.getenv("BOT_TOKEN")  # variable, because it is neaded on webhook
-    updater = Updater(token=bot_token, use_context=True)
+    updater = Updater(token=bot_token, use_context=True, persistence=my_persistence)
 
     # Get the dispatcher to register handlers
     dispatcher = updater.dispatcher
@@ -41,17 +41,18 @@ def main():
         dispatcher.add_handler(MessageHandler((Filters.text | Filters.command), echo_service))
     else:
         necessary_handlers = [CommandHandler('start', start),
-                              CommandHandler('stop', done),
+                              CommandHandler('faq', faq),
                             ]
         conv_handler = ConversationHandler(
             name="conversation",
-            entry_points=[CommandHandler("start", start)],
+            persistent=True,
+            entry_points=necessary_handlers,
             states={
 
             States.MAIN_MENU: [
                 *necessary_handlers,
-                MessageHandler(Filters.regex(text["binance_reg"]), offer_curr_choice),
-                MessageHandler(Filters.regex(text["manage_reg"]), config_choice),
+                MessageHandler(Filters.text([text["binance"]]), offer_curr_choice),
+                MessageHandler(Filters.text([text["manage"]]), config_choice),
             ],
             States.PASSWORD_CHECK: [
                 *necessary_handlers,
@@ -64,12 +65,12 @@ def main():
             States.CURR_GIVING: [
                 *necessary_handlers,
                 MessageHandler(Filters.regex(text["currency"]), offer_payment_choice),
-                MessageHandler(Filters.regex(text["return_reg"]), start)
+                MessageHandler(Filters.text([text["return"]]), start)
             ],
             States.PAYMENT_TYPE: [
                 *necessary_handlers,
                 CallbackQueryHandler(offer_payment_choice, pass_chat_data=True, pass_user_data=True),
-                MessageHandler(Filters.regex(text["return_reg"]), start)
+                MessageHandler(Filters.text([text["return"]]), start)
             ],
             States.AMOUNT_SELLING: [
                 *necessary_handlers,
@@ -97,38 +98,38 @@ def main():
             ],
             States.COMPLETE_CREATION: [
                 *necessary_handlers,
-                MessageHandler(Filters.regex(text["manage_reg"]), config_choice),
-                MessageHandler(Filters.regex(text["return_reg"]), start),
+                MessageHandler(Filters.text([text["manage"]]), config_choice),
+                MessageHandler(Filters.text([text["return"]]), start),
             ],
             States.SETTING_CHOICE:[
                *necessary_handlers,
-                MessageHandler(Filters.regex(text["return_reg"]), start),
+                MessageHandler(Filters.text([text["return"]]), start),
                 MessageHandler(Filters.text, starting_setting),
             ],
             States.SETTING_WELCOME: [
                 *necessary_handlers,
-                MessageHandler(Filters.regex(text["enable_notif_reg"]), notification_text),
-                MessageHandler(Filters.regex(text["market_check_reg"]), checking_market),
-                MessageHandler(Filters.regex(text["modifying_reg"]), setting_modify),
-                MessageHandler(Filters.regex(text["deleting_reg"]), delete_config),
-                MessageHandler(Filters.regex(text["return_reg"]), start)
+                MessageHandler(Filters.text([text["enable_notif"]]), notification_text),
+                MessageHandler(Filters.text([text["market_check"]]), checking_market),
+                MessageHandler(Filters.text([text["modifying"]]), setting_modify),
+                MessageHandler(Filters.text([text["deleting"]]), delete_config),
+                MessageHandler(Filters.text([text["return"]]), start)
             ],
             States.SETTING_NOTIFICATIONS: [
                 *necessary_handlers,
-                MessageHandler(Filters.regex(text["manage_reg"]), starting_setting),
-                MessageHandler(Filters.regex(text["return_reg"]), start)
+                MessageHandler(Filters.text([text["manage"]]), starting_setting),
+                MessageHandler(Filters.text([text["return"]]), start)
             ],
             States.SETTING_CHECK: [
                 *necessary_handlers,
-                MessageHandler(Filters.regex(text["enable_notif_reg"]), notification_text),
-                MessageHandler(Filters.regex(text["double_check_reg"]), checking_market),
-                MessageHandler(Filters.regex(text["manage_reg"]), starting_setting),
-                MessageHandler(Filters.regex(text["return_reg"]), start)
+                MessageHandler(Filters.text([text["enable_notif"]]), notification_text),
+                MessageHandler(Filters.text([text["double_check"]]), checking_market),
+                MessageHandler(Filters.text([text["manage"]]), starting_setting),
+                MessageHandler(Filters.text([text["return"]]), start)
             ],
             States.SETTING_MODIFY: [
                 *necessary_handlers,
-                MessageHandler(Filters.regex(text["manage_reg"]), starting_setting),
-                MessageHandler(Filters.regex(text["return_reg"]), start)
+                MessageHandler(Filters.text([text["manage"]]), starting_setting),
+                MessageHandler(Filters.text([text["return"]]), start)
             ],
             States.SETTING_DELETE: [
                 *necessary_handlers,

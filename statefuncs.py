@@ -21,8 +21,7 @@ def start(update, context):
         
     reply_keyboard = [
         [text["binance"], "Binance P2P с конвертацией(Позже)"],
-        ["Мои уведомления(Позже)", text["manage"]],
-        [text["done"]]
+        ["Мои уведомления(Позже)", text["manage"]]
     ]
     markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
     update.message.reply_text(text=text["start"], reply_markup=markup)
@@ -40,7 +39,7 @@ def password_check(update, context):
         return start(update, context)
     
     #admin_passwords = ["1212", "5070"]
-    leadgen_password = "4224" #["4224", "1218"]  #from DB
+    leadgen_password = "паляниця" #["4224", "1218"]  #from DB
 
     if msg in []:#admin_passwords:
         pass

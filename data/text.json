@@ -11,12 +11,13 @@
   "authorized_successfully": "харош ти %s",
   "enter_name": "як вас звати пане",
   "wrong_password": "пішов нахуй кацап",
+  "wrong_name_format": "введіть Ваше повне Імʼя з фамілією будь ласка пане",
 
 
 
    "_comment": "Текст для 1 раздела",
-  "offer_curr_choice": "Выберите валюту операции, после нажмите :Готово:",
-  "offer_payment_choice": "Выберите способ оплаты",
+  "offer_curr_choice": "Выберите валюту операции",
+  "offer_payment_choice": "Выберите способы оплаты(можно несколько)",
   "offer_amount_selling": "Внесите количество продаваемой валюты",
   "offer_ammount_buying": "Внесите количество валюты которую вы хотите купить",
   "offer_spread_amount": "Внесите процент спреда",

@@ -2,7 +2,7 @@ import os
 import sys
 import logging
 from telegram.ext import Updater, Filters
-from telegram.ext import CommandHandler, MessageHandler
+from telegram.ext import CommandHandler, MessageHandler, CallbackQueryHandler
 from statefuncs import *
 from handlers.config_handlers import *
 from handlers.stats_handlers import *
@@ -63,14 +63,13 @@ def main():
             ],
             States.CURR_GIVING: [
                 *necessary_handlers,
-                MessageHandler(Filters.regex(text["currency"]), offer_curr_choice),
-                MessageHandler(Filters.regex(text["done_reg"]), offer_payment_choice),#Должен быть переход с Done а не с валюты
+                MessageHandler(Filters.regex(text["currency"]), offer_payment_choice),
                 MessageHandler(Filters.regex(text["return_reg"]), start)
             ],
             States.PAYMENT_TYPE: [
                 *necessary_handlers,
-                MessageHandler(Filters.regex(text["payment"]), offer_payment_choice),
-                MessageHandler(Filters.regex(text["done_reg"]), offer_amount_selling),  # Должен быть переход с Done а не с валюты
+                CallbackQueryHandler(offer_payment_choice, pass_chat_data=True, pass_user_data=True),
+                # MessageHandler(Filters.regex(text["done_reg"]), offer_amount_selling),  # Должен быть переход с Done а не с валюты
                 MessageHandler(Filters.regex(text["return_reg"]), start)
             ],
             States.AMOUNT_SELLING: [
@@ -134,7 +133,7 @@ def main():
 
             ]
         },
-        fallbacks=[MessageHandler(Filters.regex(text["done_reg"]), done)],
+        fallbacks=[CommandHandler('stop', done)],
     )
 
         dispatcher.add_handler(conv_handler)

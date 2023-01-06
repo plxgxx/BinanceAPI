@@ -41,5 +41,20 @@ class States(Enum):
 
     PASSWORD_CHECK = 18
 
+    MODIFY_NAME = 19
+
+    MODIFY_BUY = 20
+
+    MODIFY_SELL = 21
+
+    MODIFY_PAYMENT = 22
+
+    MODIFY_ORDERS = 23
+
+    MODIFY_DEALS = 24
+
+    MODIFY_SPREAD = 25
+
+
 
 

@@ -2,6 +2,7 @@
 import pandas as pd
 from functools import wraps
 
+from data import text
 from .base import Session
 
 """ busines logic database access """
@@ -273,9 +274,39 @@ class DBSession():
     def get_configs_list(self, session, user_id):
         user_configs = session.query(NotificationCumfig.name).filter_by(user_id=user_id).all()
         return user_configs
+
     @local_session
-    def get_config_info(self, session, name):
-        config_info = session.query(NotificationCumfig).filter_by(name=name).first()
+    def get_config_info(self, session, chat_id, name):
+        config_info = session.query(NotificationCumfig).filter_by(user_id=chat_id,name=name).first()
         return config_info
+
+    @local_session
+    def delete_config(self, session, chat_id, name):
+        deleting_config = session.query(NotificationCumfig).filter_by(user_id=chat_id, name=name).first()
+
+        session.delete(deleting_config)
+        session.commit()
+        return deleting_config
+
+    @local_session
+    def edit_name(self, session, chat_id, arg_to_change, old_arg, new_arg):
+        config_obj = session.query(NotificationCumfig).filter_by(user_id=chat_id, name=old_arg).first()
+        if arg_to_change == text["name"]:
+            config_obj.name = new_arg
+        elif arg_to_change == text["volume_b"]:
+            config_obj.buy_volume = new_arg
+        elif arg_to_change == text["volume_s"]:#ERROR
+            config_obj.sale_volume = new_arg
+        elif arg_to_change == text["payment_c"]:
+            config_obj.payment_choices = new_arg
+        elif arg_to_change == text["%orders"]:
+            config_obj.completed_orders_percent = new_arg
+        elif arg_to_change == text["deals"]:
+            config_obj.deals_performed = new_arg
+        elif arg_to_change == text["%spread"]:
+            config_obj.spread_percent = new_arg
+        session.commit()
+
+
 
 db_session: DBSession = DBSession()

@@ -129,6 +129,13 @@ def main():
             States.SETTING_MODIFY: [
                 *necessary_handlers,
                 MessageHandler(Filters.text([text["manage"]]), starting_setting),
+                MessageHandler(Filters.text([text["name"]]), modify_name),
+                MessageHandler(Filters.text([text["volume_b"]]),  modify_name),
+                MessageHandler(Filters.text([text["volume_s"]]),  modify_name),
+                MessageHandler(Filters.text([text["payment_c"]]),  modify_name),
+                MessageHandler(Filters.text([text["%orders"]]),  modify_name),
+                MessageHandler(Filters.text([text["deals"]]),  modify_name),
+                MessageHandler(Filters.text([text["%spread"]]),  modify_name),
                 MessageHandler(Filters.text([text["return"]]), start)
             ],
             States.SETTING_DELETE: [
@@ -136,7 +143,18 @@ def main():
                 MessageHandler(Filters.regex(text["yes_reg"]), succesfull_delete),
                 MessageHandler(Filters.regex(text["no_reg"]), starting_setting)
 
-            ]
+            ],
+            States.MODIFY_NAME:[
+                *necessary_handlers,
+                MessageHandler(Filters.text(text["return"]), start),
+                MessageHandler(Filters.text, modify_name_complete)
+            ],
+            States.MODIFY_BUY:[],
+            States.MODIFY_SELL:[],
+            States.MODIFY_PAYMENT:[],
+            States.MODIFY_ORDERS:[],
+            States.MODIFY_DEALS:[],
+            States.MODIFY_SPREAD:[]
         },
         fallbacks=[CommandHandler('stop', done)],
     )

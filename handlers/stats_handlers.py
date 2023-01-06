@@ -20,8 +20,10 @@ def config_choice(update, context):
 
 
 def starting_setting(update, context):
+    chat_id = update.message.chat.id
     msg = update.message.text
-    config_info = db_session.get_config_info(msg)
+    context.user_data["name"] = msg
+    config_info = db_session.get_config_info(chat_id, msg)
     message_text = f"""
     Название: {config_info.name}\n
     
@@ -69,6 +71,8 @@ def checking_market(update, context):
 
 def setting_modify(update, context):
     reply_keyboard = [
+        [text["name"], text["volume_b"], text["volume_s"]],
+        [text["payment_c"], text["%orders"], text["deals"], text["%spread"]],
         [text["manage"], text["return"]]
     ]
     markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
@@ -77,14 +81,58 @@ def setting_modify(update, context):
 
 
 def delete_config(update, context):
+    chat_id = update.message.chat.id
     reply_keyboard = [
         [text["yes"], text["no"]]
     ]
     markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
     update.message.reply_text(text=text["delete"], reply_markup=markup)
+    db_session.delete_config(chat_id, context.user_data["name"])
     return States.SETTING_DELETE
 
 
 def succesfull_delete(update, context):
     update.message.reply_text(text=text["deleted"])
     return start(update, context)
+
+
+def modify_name (update, context):
+    msg = update.message.text
+    if msg == text["name"]:
+        update.message.reply_text(text="Введите новое название конфигурации")
+        context.chat_data["arg_to_change"] = text["name"]
+    elif msg == text["volume_b"]:
+        update.message.reply_text (text="Введите новый объём продаж")
+        context.chat_data["arg_to_change"] = text["volume_s"]
+    elif msg == text["volume_s"]:
+        update.message.reply_text(text="Введите новый объём покупки")
+        context.chat_data["arg_to_change"] = text["volume_b"]
+    elif msg == text["payment_c"]:
+        reply_keyboard = [
+            ["Revolut","Wise","SkrillMoneyBookers"],
+            ["Adcash","ZEN"],
+            [text["return"]]
+        ]
+        markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
+        update.message.reply_text (text="Введите новый способ оплаты", reply_markup=markup)
+        context.chat_data["arg_to_change"] = text["payment_c"]
+    elif msg == text["%orders"]:
+        update.message.reply_text(text="Введите мин. % выполненых ордеров")
+        context.chat_data["arg_to_change"] = text["%orders"]
+    elif msg == text["deals"]:
+        update.message.reply_text(text="Введите мин количество выполненых ордеров")
+        context.chat_data["arg_to_change"] = text["deals"]
+    elif msg == text["%spread"]:
+        update.message.reply_text (text="Введите новый мин. % спреда")
+        context.chat_data["arg_to_change"] = text["%spread"]
+
+    return States.MODIFY_NAME
+
+
+def modify_name_complete(update, context):
+    chat_id = update.message.chat.id
+    msg = update.message.text
+    db_session.edit_name(chat_id=chat_id, arg_to_change=context.chat_data["arg_to_change"], old_arg=context.user_data["name"], new_arg=msg)
+    return starting_setting(update, context)
+
+

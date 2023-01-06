@@ -290,7 +290,7 @@ class DBSession():
 
     @local_session
     def edit_name(self, session, chat_id, arg_to_change, old_arg, new_arg):
-        config_obj = session.query(NotificationCumfig).filter_by(user_id=chat_id, name=old_arg).first()
+        config_obj = session.query(NotificationCumfig).filter_by(user_id=chat_id, name=old_arg).first()#ERROR
         if arg_to_change == text["name"]:
             config_obj.name = new_arg
         elif arg_to_change == text["volume_b"]:
@@ -299,7 +299,6 @@ class DBSession():
             config_obj.sale_volume = new_arg
         elif arg_to_change == text["payment_c"]:
             config_obj.payment_choices = new_arg
-        elif arg_to_change == text["%orders"]:
             config_obj.completed_orders_percent = new_arg
         elif arg_to_change == text["deals"]:
             config_obj.deals_performed = new_arg

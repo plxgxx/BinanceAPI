@@ -133,9 +133,9 @@ def main():
                 MessageHandler(Filters.text([text["volume_b"]]),  modify_name),
                 MessageHandler(Filters.text([text["volume_s"]]),  modify_name),
                 MessageHandler(Filters.text([text["payment_c"]]),  modify_name),
-                MessageHandler(Filters.text([text["%orders"]]),  modify_name),
-                MessageHandler(Filters.text([text["deals"]]),  modify_name),
-                MessageHandler(Filters.text([text["%spread"]]),  modify_name),
+                MessageHandler(Filters.text([text["min_orders_perc"]]),  modify_name),
+                MessageHandler(Filters.text([text["min_deals_amount"]]),  modify_name),
+                MessageHandler(Filters.text([text["min_spread_perc"]]),  modify_name),
                 MessageHandler(Filters.text([text["return"]]), start)
             ],
             States.SETTING_DELETE: [

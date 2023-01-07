@@ -22,7 +22,7 @@ def config_choice(update, context):
 def starting_setting(update, context):
     chat_id = update.message.chat.id
     msg = update.message.text
-    context.user_data["name"] = msg
+    context.user_data["config_name"] = msg
     config_info = db_session.get_config_info(chat_id, msg)
     message_text = f"""
     Название: {config_info.name}\n
@@ -72,7 +72,7 @@ def checking_market(update, context):
 def setting_modify(update, context):
     reply_keyboard = [
         [text["name"], text["volume_b"], text["volume_s"]],
-        [text["payment_c"], text["%orders"], text["deals"], text["%spread"]],
+        [text["payment_c"], text["min_orders_perc"], text["min_deals_amount"], text["min_spread_perc"]],
         [text["manage"], text["return"]]
     ]
     markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
@@ -87,7 +87,7 @@ def delete_config(update, context):
     ]
     markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
     update.message.reply_text(text=text["delete"], reply_markup=markup)
-    db_session.delete_config(chat_id, context.user_data["name"])
+    db_session.delete_config(chat_id, context.user_data["config_name"])
     return States.SETTING_DELETE
 
 
@@ -116,15 +116,15 @@ def modify_name (update, context):
         markup = ReplyKeyboardMarkup(reply_keyboard, one_time_keyboard=True)
         update.message.reply_text (text="Введите новый способ оплаты", reply_markup=markup)
         context.chat_data["arg_to_change"] = text["payment_c"]
-    elif msg == text["%orders"]:
+    elif msg == text["min_orders_perc"]:
         update.message.reply_text(text="Введите мин. % выполненых ордеров")
-        context.chat_data["arg_to_change"] = text["%orders"]
-    elif msg == text["deals"]:
+        context.chat_data["arg_to_change"] = text["min_orders_perc"]
+    elif msg == text["min_deals_amount"]:
         update.message.reply_text(text="Введите мин количество выполненых ордеров")
-        context.chat_data["arg_to_change"] = text["deals"]
-    elif msg == text["%spread"]:
+        context.chat_data["arg_to_change"] = text["min_deals_amount"]
+    elif msg == text["min_spread_perc"]:
         update.message.reply_text (text="Введите новый мин. % спреда")
-        context.chat_data["arg_to_change"] = text["%spread"]
+        context.chat_data["arg_to_change"] = text["min_spread_perc"]
 
     return States.MODIFY_NAME
 
@@ -132,7 +132,7 @@ def modify_name (update, context):
 def modify_name_complete(update, context):
     chat_id = update.message.chat.id
     msg = update.message.text
-    db_session.edit_name(chat_id=chat_id, arg_to_change=context.chat_data["arg_to_change"], old_arg=context.user_data["name"], new_arg=msg)
-    return starting_setting(update, context)
+    db_session.edit_name(chat_id=chat_id, arg_to_change=context.chat_data["arg_to_change"], old_arg=context.user_data["config_name"], new_arg=msg)
+    return config_choice(update, context)
 
 

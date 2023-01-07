@@ -299,10 +299,11 @@ class DBSession():
             config_obj.sale_volume = new_arg
         elif arg_to_change == text["payment_c"]:
             config_obj.payment_choices = new_arg
+        elif arg_to_change == text["min_orders_perc"]:
             config_obj.completed_orders_percent = new_arg
-        elif arg_to_change == text["deals"]:
+        elif arg_to_change == text["min_deals_amount"]:
             config_obj.deals_performed = new_arg
-        elif arg_to_change == text["%spread"]:
+        elif arg_to_change == text["min_spread_perc"]:
             config_obj.spread_percent = new_arg
         session.commit()
 
